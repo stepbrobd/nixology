@@ -16,6 +16,10 @@
           text = "cowsay cheese";
         };
 
+        devShells.default = pkgs.mkShell {
+          packages = [ self.packages.${system}.default ];
+        };
+
         formatter = pkgs.nixpkgs-fmt;
       });
 }
