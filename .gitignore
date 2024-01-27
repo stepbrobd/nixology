@@ -1,0 +1,12 @@
+# Nix
+**/.direnv/
+**/result/
+**/result-*/
+
+# Editor
+**/.idea/
+**/.vscode/
+
+# Typst
+**/*.pdf
+
