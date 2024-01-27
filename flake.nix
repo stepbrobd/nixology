@@ -16,7 +16,18 @@
           (n: _v: inputs.${n}.packages.${system}.default)
           (lib.filterAttrs (n: _v: lib.hasPrefix "example" n) inputs);
 
-        formatter = pkgs.nixpkgs-fmt;
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            typst
+          ];
+        };
+
+        formatter = pkgs.writeShellScriptBin "formatter" ''
+          set -eoux pipefail
+          shopt -s globstar
+          ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+          ${pkgs.typstfmt}/bin/typstfmt **/*.typ
+        '';
       });
 
   inputs = {
