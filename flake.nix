@@ -12,14 +12,9 @@
         lib = nixpkgs.lib;
       in
       {
-        packages = lib.genAttrs
-          (lib.remove null
-            (lib.forEach (builtins.attrNames inputs) (n:
-              if lib.hasPrefix "example" n
-              then n
-              else null
-            )))
-          (ex: inputs.${ex}.packages.${system}.default);
+        packages = lib.mapAttrs
+          (n: _v: inputs.${n}.packages.${system}.default)
+          (lib.filterAttrs (n: _v: lib.hasPrefix "example" n) inputs);
 
         formatter = pkgs.nixpkgs-fmt;
       });
@@ -29,12 +24,12 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     example1 = {
-      url = "path:./example1";
+      url = "path:example1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     example2 = {
-      url = "path:./example2";
+      url = "path:example2";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
