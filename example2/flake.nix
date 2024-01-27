@@ -14,7 +14,7 @@
     in
     {
       packages.default = pkgs.rustPlatform.buildRustPackage {
-        pname = "<NAME>";
+        pname = (pkgs.lib.importTOML ./Cargo.toml).package.name;
         inherit ((pkgs.lib.importTOML ./Cargo.toml).package) version;
         src = ./.;
         cargoLock.lockFile = ./Cargo.lock;
