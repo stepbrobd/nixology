@@ -10,16 +10,20 @@
       let
         pkgs = import nixpkgs { inherit system; };
         lib = nixpkgs.lib;
+
+        examplesFor = attr: lib.mapAttrs
+          (n: _v: inputs.${n}.${attr}.${system}.default)
+          (lib.filterAttrs (n: _v: lib.hasPrefix "example" n) inputs);
       in
       {
-        packages = lib.mapAttrs
-          (n: _v: inputs.${n}.packages.${system}.default)
-          (lib.filterAttrs (n: _v: lib.hasPrefix "example" n) inputs);
+        packages = examplesFor "packages";
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            typst
-          ];
+        devShells = examplesFor "devShells" // {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              typst
+            ];
+          };
         };
 
         formatter = pkgs.writeShellScriptBin "formatter" ''
