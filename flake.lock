@@ -11,12 +11,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-LdyW3MNkmkgU8QPVWR0ffXbMrFly8rQPCMc5I802A5I=",
-        "path": "./example1",
+        "narHash": "sha256-XeUtLUeKo46LPXMaP8DkHFNQmgUIAO5qwRRvJIxvQFo=",
+        "path": "example1",
         "type": "path"
       },
       "original": {
-        "path": "./example1",
+        "path": "example1",
         "type": "path"
       }
     },
@@ -31,12 +31,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-iiFu3fn4jdztuzM3fxtbNCwkKlTmqZI+x0hOigMvdAs=",
-        "path": "./example2",
+        "narHash": "sha256-l1oN/Ns0c09KRr5+ZwglHlNMfV6UizmKIMonKpAKEHU=",
+        "path": "example2",
         "type": "path"
       },
       "original": {
-        "path": "./example2",
+        "path": "example2",
         "type": "path"
       }
     },
