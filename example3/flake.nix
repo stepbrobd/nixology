@@ -19,6 +19,7 @@
 
           formatter = pkgs.nixpkgs-fmt;
         }) // {
+      # nix build .#nixosConfigurations.example3.config.system.build.toplevel
       nixosConfigurations.example3 = nixpkgs.lib.nixosSystem {
         modules = [
           ./hardware.nix
