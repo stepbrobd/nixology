@@ -8,56 +8,56 @@
 #set document(title: title, author: author, date: date)
 #set page(paper: "presentation-16-9")
 
-#show: simple-theme.with(footer: [])
+#show: simple-theme.with(footer: none)
 
 #title-slide[
-  #image("nix.svg", width: 10%)
+#image("nix.svg", width: 10%)
 
-  = #title
+= #title
 
-  #v(4em)
+#v(4em)
 
-  #set text(16pt)
+#set text(16pt)
 
-  #author
+#author
 
-  #date.display("[month repr:long] [day padding:none], [year]")
+#date.display("[month repr:long] [day padding:none], [year]")
 ]
 
 #slide[
-  == What's Nix?
+== What's Nix?
 
-  #grid(columns: 2, gutter: 2mm, [
-    The holy trinity #footnote[https://zackerthescar.com/nix-nix-nix]:
+#grid(columns: 2, gutter: 2mm, [
+  The holy trinity #footnote[https://zackerthescar.com/nix-nix-nix]:
 
-    - Nix - the DSL | the package manager
-    - Nixpkgs - the package collection
-    - NixOS - the operating system
-  ], [#image("trinity.svg", width: 74%)])
+  - Nix - the DSL | the package manager
+  - Nixpkgs - the package collection
+  - NixOS - the operating system
+], [#image("trinity.svg", width: 74%)])
 ]
 
 #slide[
-  == The Problem
+== The Problem
 
-  #set align(center)
+#set align(center)
 
-  #grid(
-    columns: 2,
-    gutter: 2mm,
-    image("xkcd.png", width: 95%),
-    footnote[https://imgs.xkcd.com/comics/cnr.png],
-  )
+#grid(
+  columns: 2,
+  gutter: 2mm,
+  image("xkcd.png", width: 95%),
+  footnote[https://imgs.xkcd.com/comics/cnr.png],
+)
 ]
 
 #slide[
 == "Reproducibility" \* \*\* \*\*\*
 
 ```nix
-  {
-    inputs = { ... };
-    outputs = { self, ... } @ inputs: { ... };
-  }
-  ```
+{
+  inputs = { ... };
+  outputs = { self, ... } @ inputs: { ... };
+}
+```
 
 \*: only in *pure* mode // or strick mode, in a pure evaluation, builders don't have external access (network, out of path resources, etc.)
 
@@ -92,30 +92,30 @@
 ]
 
 #slide[
-  == Derivations and Closures #footnote("https://zero-to-nix.com/concepts/derivations")
+== Derivations and Closures #footnote("https://zero-to-nix.com/concepts/derivations")
 
-  A _derivation_
+A _derivation_
 
-  // - is an instruction
-  - can depend on any number of other derivation
-  - can produce one or more outputs
-  // derivation outputs can be libraries, packages, mannual pages, etc.
+// - is an instruction
+- can depend on any number of other derivation
+- can produce one or more outputs
+// derivation outputs can be libraries, packages, mannual pages, etc.
 
-  A _closure_
+A _closure_
 
-  - encapsulates all of the packages required to build or run it
-  - has two types, build-time closure and runtime closure// differenciated by phases, buildPhase, buildInputs, nativeBuildInputs v.s. installPhase, fixupPhase
+- encapsulates all of the packages required to build or run it
+- has two types, build-time closure and runtime closure// differenciated by phases, buildPhase, buildInputs, nativeBuildInputs v.s. installPhase, fixupPhase
 ]
 
 #slide[
 == Nix Store #footnote("https://zero-to-nix.com/concepts/nix-store")
 
 ```txt
-  /nix/store/ffkg7rz4zxfsdix6xxmhk2v3nx76r141-nix-2.18.1
-  |---------|--------------------------------|---------|
-   store     hash                             name
-   prefix
-  ```
+/nix/store/ffkg7rz4zxfsdix6xxmhk2v3nx76r141-nix-2.18.1
+|---------|--------------------------------|---------|
+ store     hash                             name
+ prefix
+```
 
 - store prefix can be local or remote (binary cache)
 - hash either derived from input (default) or output (CA derivation)
@@ -135,11 +135,16 @@ Nix expressions $arrow.r.double$ derivation(s)
 ]
 
 #slide[
-== Packaging #footnote("https://github.com/stepbrobd/nixology/tree/master/example1")
+== Packaging #footnote("https://nixolo.gy/example1")
 
 #set text(14pt)
 
-```nix
+
+#grid(
+  columns: 2,
+  gutter: 2cm,
+  [
+  ```nix
   {
     inputs = { ... };
 
@@ -156,11 +161,26 @@ Nix expressions $arrow.r.double$ derivation(s)
         };
       });
   }
-```
+  ```
+  ],
+  [
+  #v(4.5cm)
+  ```txt
+   ________
+  < cheese >
+   --------
+          \   ^__^
+           \  (oo)\_______
+              (__)\       )\/\
+                  ||----w |
+                  ||     ||
+  ```
+  ],
+)
 ]
 
 #slide[
-== Development #footnote("https://github.com/stepbrobd/nixology/tree/master/example2")
+== Development #footnote("https://nixolo.gy/example2")
 
 #set text(14pt)
 
@@ -176,14 +196,14 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            cargo
-            rustc
-            rustfmt
-          ];
-        };
-        ```
+  devShells.default = pkgs.mkShell {
+    packages = with pkgs; [
+      cargo
+      rustc
+      rustfmt
+    ];
+  };
+  ```
   ],
   [
   *Formatter*:
@@ -194,13 +214,13 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-        formatter = pkgs.writeShellScriptBin "formatter" ''
-          set -eoux pipefail
-          shopt -s globstar
-          ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-          ${pkgs.rustfmt}/bin/rustfmt **/*.rs
-        '';
-        ```
+  formatter = pkgs.writeShellScriptBin "formatter" ''
+    set -eoux pipefail
+    shopt -s globstar
+    ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+    ${pkgs.rustfmt}/bin/rustfmt **/*.rs
+  '';
+  ```
   ],
 )
 ]
@@ -216,42 +236,46 @@ Nix expressions $arrow.r.double$ derivation(s)
   columns: 2,
   gutter: 2cm,
   [
-  w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
-
-  ```shell
-            nix-repl> pkgs.coq_8_
-            pkgs.coq_8_10  pkgs.coq_8_12
-            pkgs.coq_8_14  pkgs.coq_8_16
-            pkgs.coq_8_18  pkgs.coq_8_5
-            pkgs.coq_8_7   pkgs.coq_8_9
-            ...
-            ```
-
-  #v(2em)
-
-  w/ `nix shell`: ```shell
-            nix shell nixpkgs/<hash>#{pkg1,...}
-            ```
-
-  #v(2em)
-
-  or DIY!
+    w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
+    
+    ```shell
+    nix-repl> pkgs.coq_8_
+    pkgs.coq_8_10  pkgs.coq_8_12
+    pkgs.coq_8_14  pkgs.coq_8_16
+    pkgs.coq_8_18  pkgs.coq_8_5
+    pkgs.coq_8_7   pkgs.coq_8_9
+    ...
+    ```
+    
+    #v(2em)
+    
+    w/ `nix shell`:
+    
+    ```shell
+    nix shell nixpkgs/<hash>#{pkg1,...}
+    ```
+    
+    #v(2em)
+  
+    or DIY!
   ],
   [
-  w/ flakes: ```nix
-            inputs = {
-              nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
-              nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
-              ...
-            };
+    w/ flakes:
+    
+    ```nix
+    inputs = {
+      nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
+      nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
+      ...
+    };
 
-            outputs = { self, ... }: {
-              ...
-              pkgsA.<some pkg>;
-              pkgsB.<some pkg>;
-              ...
-            };
-            ```
+    outputs = { self, ... }: {
+      ...
+      pkgsA.<some pkg>;
+      pkgsB.<some pkg>;
+      ...
+    };
+    ```
   ],
 )
 ]
@@ -278,41 +302,39 @@ Nix expressions $arrow.r.double$ derivation(s)
 ]
 
 #slide[
-== System Configurations
+== System Configurations #footnote("https://nixolo.gy/example3")
 
 #set text(18pt)
 
 ```nix
 outputs = { self, nixpkgs, ... }: {
   nixosConfigurations.example3 = nixpkgs.lib.nixosSystem {
-    modules = [
-      ./hardware.nix
-      ./service.nix
-    ];
+    modules = [ ./hardware.nix ./service.nix ];
   };
 };
 ```
 
-*System Closure*: ```shell
+*System Closure*:
+```shell
 nix build .#nixosConfigurations.example3.config.system.build.toplevel
 ```
 
-*Rebuild*: ```shell
+*Rebuild*:
+```shell
 nixos-rebuild <switch|boot|...> --flake .#example3
 ```
 ]
 #slide[
-  == Resources
+== Resources
 
-  - https://github.com/determinatesystems/nix-installer
-  - https://zero-to-nix.com
-  - https://nixos.org/manual/nix/unstable/
-  - https://discourse.nixos.org
-  - https://mynixos.com
-  - REPL
-  - source code
-    - https://github.com/features/code-search
-    - https://sourcegraph.com
-
+- https://github.com/determinatesystems/nix-installer
+- https://zero-to-nix.com
+- https://nixos.org/manual/nix/unstable/
+- https://discourse.nixos.org
+- https://mynixos.com
+- REPL
+- source code
+  - https://github.com/features/code-search
+  - https://sourcegraph.com
 ]
 
