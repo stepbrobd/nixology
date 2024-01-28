@@ -34,13 +34,13 @@
     - Nixpkgs - the package collection
     - NixOS - the operating system
   ], [#image("trinity.svg", width: 74%)])
-
 ]
 
 #slide[
   == The Problem
 
   #set align(center)
+
   #grid(
     columns: 2,
     gutter: 2mm,
@@ -156,7 +156,7 @@ Nix expressions $arrow.r.double$ derivation(s)
         };
       });
   }
-  ```
+```
 ]
 
 #slide[
@@ -176,14 +176,14 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-            devShells.default = pkgs.mkShell {
-              packages = with pkgs; [
-                cargo
-                rustc
-                rustfmt
-              ];
-            };
-            ```
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            cargo
+            rustc
+            rustfmt
+          ];
+        };
+        ```
   ],
   [
   *Formatter*:
@@ -194,14 +194,125 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-            formatter = pkgs.writeShellScriptBin "formatter" ''
-              set -eoux pipefail
-              shopt -s globstar
-              ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-              ${pkgs.rustfmt}/bin/rustfmt **/*.rs
-            '';
+        formatter = pkgs.writeShellScriptBin "formatter" ''
+          set -eoux pipefail
+          shopt -s globstar
+          ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+          ${pkgs.rustfmt}/bin/rustfmt **/*.rs
+        '';
+        ```
+  ],
+)
+]
+
+#slide[
+== Development
+
+#set text(14pt)
+
+*Pinning*:
+
+#grid(
+  columns: 2,
+  gutter: 2cm,
+  [
+  w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
+
+  ```shell
+            nix-repl> pkgs.coq_8_
+            pkgs.coq_8_10  pkgs.coq_8_12
+            pkgs.coq_8_14  pkgs.coq_8_16
+            pkgs.coq_8_18  pkgs.coq_8_5
+            pkgs.coq_8_7   pkgs.coq_8_9
+            ...
+            ```
+
+  #v(2em)
+
+  w/ `nix shell`: ```shell
+            nix shell nixpkgs/<hash>#{pkg1,...}
+            ```
+
+  #v(2em)
+
+  or DIY!
+  ],
+  [
+  w/ flakes: ```nix
+            inputs = {
+              nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
+              nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
+              ...
+            };
+
+            outputs = { self, ... }: {
+              ...
+              pkgsA.<some pkg>;
+              pkgsB.<some pkg>;
+              ...
+            };
             ```
   ],
 )
+]
+
+#slide[
+== System Configurations
+
+#set text(18pt)
+
+*Modules* #footnote("https://mynixos.com/nixpkgs/options/services.caddy"):
+
+```nix
+{ ... }:
+{
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.caddy = {
+    virtualHosts."nixolo.gy" = {
+      extraConfig = "redir https://github.com/stepbrobd/nixology/tree/master{uri}";
+      serverAliases = [ "*.nixolo.gy" ];
+    };
+  };
+}
+```
+]
+
+#slide[
+== System Configurations
+
+#set text(18pt)
+
+```nix
+outputs = { self, nixpkgs, ... }: {
+  nixosConfigurations.example3 = nixpkgs.lib.nixosSystem {
+    modules = [
+      ./hardware.nix
+      ./service.nix
+    ];
+  };
+};
+```
+
+*System Closure*: ```shell
+nix build .#nixosConfigurations.example3.config.system.build.toplevel
+```
+
+*Rebuild*: ```shell
+nixos-rebuild <switch|boot|...> --flake .#example3
+```
+]
+#slide[
+  == Resources
+
+  - https://github.com/determinatesystems/nix-installer
+  - https://zero-to-nix.com
+  - https://nixos.org/manual/nix/unstable/
+  - https://discourse.nixos.org
+  - https://mynixos.com
+  - REPL
+  - source code
+    - https://github.com/features/code-search
+    - https://sourcegraph.com
+
 ]
 
