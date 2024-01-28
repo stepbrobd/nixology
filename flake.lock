@@ -11,7 +11,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-i+0r4VklXi9gn8LlZiQ8v5iPUIfY/AevmW8q9BCLcVE=",
+        "narHash": "sha256-83n/wa8J/YyfVggetg7SwMeiN7bn57kCv4uhBfDJnDo=",
         "path": "example1",
         "type": "path"
       },
@@ -31,12 +31,32 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-hP1gQnkE5l5x3KWoQ+jt3Y0V/JEiuay9+SzqDIYHYhs=",
+        "narHash": "sha256-yPl+GECNsCQMm6/qzkOu1wrv2HZWGndOqqToLbAVi+g=",
         "path": "example2",
         "type": "path"
       },
       "original": {
         "path": "example2",
+        "type": "path"
+      }
+    },
+    "example3": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-UyIQr2W9iS1D6Z1jyNRGZexkmMHzEQVtPsYsPW/bI8A=",
+        "path": "example3",
+        "type": "path"
+      },
+      "original": {
+        "path": "example3",
         "type": "path"
       }
     },
@@ -78,6 +98,7 @@
       "inputs": {
         "example1": "example1",
         "example2": "example2",
+        "example3": "example3",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }
