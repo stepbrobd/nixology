@@ -32,7 +32,12 @@
           ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
           ${pkgs.typstfmt}/bin/typstfmt **/*.typ
         '';
-      });
+      }) // {
+      hydraJobs = {
+        inherit (self)
+          packages devShells;
+      };
+    };
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
