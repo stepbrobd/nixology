@@ -10,14 +10,19 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-83n/wa8J/YyfVggetg7SwMeiN7bn57kCv4uhBfDJnDo=",
-        "path": "example1",
-        "type": "path"
+        "dir": "example1",
+        "lastModified": 1706732887,
+        "narHash": "sha256-hxF3BJhYttrDOQlspARzfjw/iRLhXBuA2Ru/ALF9N9M=",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "rev": "389afbafbdc659fb03ba9aa0c25791c76b6119f0",
+        "type": "github"
       },
       "original": {
-        "path": "example1",
-        "type": "path"
+        "dir": "example1",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "type": "github"
       }
     },
     "example2": {
@@ -30,14 +35,19 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-yPl+GECNsCQMm6/qzkOu1wrv2HZWGndOqqToLbAVi+g=",
-        "path": "example2",
-        "type": "path"
+        "dir": "example2",
+        "lastModified": 1706732887,
+        "narHash": "sha256-hxF3BJhYttrDOQlspARzfjw/iRLhXBuA2Ru/ALF9N9M=",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "rev": "389afbafbdc659fb03ba9aa0c25791c76b6119f0",
+        "type": "github"
       },
       "original": {
-        "path": "example2",
-        "type": "path"
+        "dir": "example2",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "type": "github"
       }
     },
     "example3": {
@@ -50,14 +60,19 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-k+6JS5jREcgDROIWFL4ds3xtzPiDcrZg23Eyy7cQwQY=",
-        "path": "example3",
-        "type": "path"
+        "dir": "example3",
+        "lastModified": 1706732887,
+        "narHash": "sha256-hxF3BJhYttrDOQlspARzfjw/iRLhXBuA2Ru/ALF9N9M=",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "rev": "389afbafbdc659fb03ba9aa0c25791c76b6119f0",
+        "type": "github"
       },
       "original": {
-        "path": "example3",
-        "type": "path"
+        "dir": "example3",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "type": "github"
       }
     },
     "flake-utils": {

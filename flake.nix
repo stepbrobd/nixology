@@ -44,17 +44,17 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     example1 = {
-      url = "path:example1";
+      url = "github:stepbrobd/nixology?dir=example1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     example2 = {
-      url = "path:example2";
+      url = "github:stepbrobd/nixology?dir=example2";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
     example3 = {
-      url = "path:example3";
+      url = "github:stepbrobd/nixology?dir=example3";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
