@@ -11,11 +11,11 @@
       },
       "locked": {
         "dir": "example1",
-        "lastModified": 1706887703,
-        "narHash": "sha256-gloh91FE0/r9tAL2o7fWQCu/YyzAZ1Ob8e5Pk0CBGYw=",
+        "lastModified": 1706893817,
+        "narHash": "sha256-NcOTE3VWOSNe9qVehEDZ2+4Fc24XM+QqYtokPFHKiIo=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "a62767928b074cd82a982ab9378c78f72abc97da",
+        "rev": "44a7de6e76f133c0958afc075769bdc72e5dfa70",
         "type": "github"
       },
       "original": {
@@ -36,11 +36,11 @@
       },
       "locked": {
         "dir": "example2",
-        "lastModified": 1706887703,
-        "narHash": "sha256-gloh91FE0/r9tAL2o7fWQCu/YyzAZ1Ob8e5Pk0CBGYw=",
+        "lastModified": 1706893817,
+        "narHash": "sha256-NcOTE3VWOSNe9qVehEDZ2+4Fc24XM+QqYtokPFHKiIo=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "a62767928b074cd82a982ab9378c78f72abc97da",
+        "rev": "44a7de6e76f133c0958afc075769bdc72e5dfa70",
         "type": "github"
       },
       "original": {
@@ -61,15 +61,40 @@
       },
       "locked": {
         "dir": "example3",
-        "lastModified": 1706887703,
-        "narHash": "sha256-gloh91FE0/r9tAL2o7fWQCu/YyzAZ1Ob8e5Pk0CBGYw=",
+        "lastModified": 1706893817,
+        "narHash": "sha256-NcOTE3VWOSNe9qVehEDZ2+4Fc24XM+QqYtokPFHKiIo=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "a62767928b074cd82a982ab9378c78f72abc97da",
+        "rev": "44a7de6e76f133c0958afc075769bdc72e5dfa70",
         "type": "github"
       },
       "original": {
         "dir": "example3",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "type": "github"
+      }
+    },
+    "example4": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "example4",
+        "lastModified": 1706893817,
+        "narHash": "sha256-NcOTE3VWOSNe9qVehEDZ2+4Fc24XM+QqYtokPFHKiIo=",
+        "owner": "stepbrobd",
+        "repo": "nixology",
+        "rev": "44a7de6e76f133c0958afc075769bdc72e5dfa70",
+        "type": "github"
+      },
+      "original": {
+        "dir": "example4",
         "owner": "stepbrobd",
         "repo": "nixology",
         "type": "github"
@@ -114,6 +139,7 @@
         "example1": "example1",
         "example2": "example2",
         "example3": "example3",
+        "example4": "example4",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }
