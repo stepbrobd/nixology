@@ -3,7 +3,7 @@
 
 #let title = "Nixology"
 #let author = "Yifei Sun"
-#let date = datetime(year: 2024, month: 2, day: 2)
+#let date = datetime(year: 2024, month: 6, day: 28)
 
 #set document(title: title, author: author, date: date)
 #set page(paper: "presentation-16-9")
@@ -11,100 +11,176 @@
 #show: simple-theme.with(footer: none)
 
 #title-slide[
-#image("nix.svg", width: 10%)
+  #image("nix.svg", width: 10%)
 
-= #title
+  = #title
 
-#v(4em)
+  #v(4em)
 
-#set text(16pt)
+  #set text(16pt)
 
-#author
+  #author
 
-#date.display("[month repr:long] [day padding:none], [year]")
+  #date.display("[month repr:long] [day padding:none], [year]")
 ]
 
 #slide[
-== What's Nix?
+  == Problem
 
-#grid(columns: 2, gutter: 2mm, [
-  The holy trinity #footnote[https://zackerthescar.com/nix-nix-nix]:
-
-  - Nix - the DSL | the package manager
-  - Nixpkgs - the package collection
-  - NixOS - the operating system
-], [#image("trinity.svg", width: 74%)])
+  #set align(center)
+  #image("works.jpg", width: 75%)
 ]
 
 #slide[
-== The Problem
+== Solution
 
-#set align(center)
+Functions:
 
 #grid(
   columns: 2,
-  gutter: 2mm,
-  image("xkcd.png", width: 95%),
-  footnote[https://imgs.xkcd.com/comics/cnr.png],
-)
-]
-
-#slide[
-== "Reproducibility" \* \*\* \*\*\*
-
+  gutter: 2.5cm,
+)[
 ```nix
-{
-  inputs = { ... };
-  outputs = { self, ... } @ inputs: { ... };
-}
+{ inputs = { ... }; }
 ```
 
-\*: only in *pure* mode // or strick mode, in a pure evaluation, builders don't have external access (network, out of path resources, etc.)
+- Dependencies are inputs
+- Usually tarballs or git repos
+- Pinned and hashed
+][
+```nix
+{ outputs = inputs: { ... }; }
+```
 
-\*\*: can achieve with `nix-channel`, but painful
-
-// almost all community projects are using nix flakes, impossible to get thrown away
-// https://determinate.systems/posts/experimental-does-not-mean-unstable
-\*\*\*: the example above is with `flakes`, still experiemntal #footnote[$"Experiemntal"^"TM"$ since Nov. 2021]
+- Outputs are functions of inputs// or contents of other outputs, or nothing
+- Can be anything
+- Lazily evaluated// evaluated only when needed
+]
 ]
 
 #slide[
-== Channels v.s. Flakes
+  == Trinity
 
-#grid(
-  columns: 2,
-  gutter: 2cm,
-  [
-  Channels
-  - required by all `nix-*`// CLI tools dependes on channels
-  - `nix-channel <args>`// channels can be added, removed, ... with `nix-channel`
-  - hard to pin//  to a specific version
-  ],
-  [
-  Flakes:
-  - have inputs and outputs, like a function
-  - inputs gets "locked" with `flake.lock`
-  - experiemntal $!=$ unstable #footnote(
-      "https://determinate.systems/posts/experimental-does-not-mean-unstable",
-    )
-  ],
-)
+  #grid(columns: 2, gutter: 2mm, [
+    - Nix - the package manager
+    - Nix - the DSL
+    - Nixpkgs - the package collection
+    - NixOS - the operating system
+  ], [#image("trinity.svg", width: 75%)])
 ]
 
 #slide[
-== Derivations and Closures #footnote("https://zero-to-nix.com/concepts/derivations")
+== Language Basics
 
-A _derivation_
+#grid(columns: 2, gutter: 6cm)[
+Integers: ```nix
+> x = 1 + 1
+> x
+2
+```
 
-// - is an instruction
-- can depend on any number of other derivation
-- can produce one or more outputs
-// derivation outputs can be libraries, packages, mannual pages, etc.
+Floats: ```nix
+> y = 1.0 + 1.0
+> y
+2.0
+```
+][
+Strings: ```nix
+> z = "world"
+> "hello ${z}"
+"hello world"
+```
 
-A _closure_
+Attribute sets: ```nix
+> s = { a = { b = 1; }; }
+> s.a.b
+1
+```
+]
+]
 
-- encapsulates all of the packages required to build or run it
-- has two types, build-time closure and runtime closure// differenciated by phases, buildPhase, buildInputs, nativeBuildInputs v.s. installPhase, fixupPhase
+#slide[
+== Language Basics
+
+#grid(columns: 2, gutter: 3cm)[
+Lists:
+
+```nix
+> [ 1 "2" (_: 3) ]
+[ 1 "2" <thunk> ]
+```
+
+Recursive attrsets:
+
+```nix
+> rec { x = 1; y = x; }
+{ x = 1; y = 1; }
+```
+][
+Bindings:
+
+```nix
+> let x = 1; in x + 1
+2
+```
+
+Inherits:
+
+```nix
+> let x = 1; y = x; in
+    { inherit x y; }
+{ x = 1; y = 1; }
+```
+]
+]
+
+#slide[
+== Language Basics
+
+#grid(columns: 2, gutter: 3cm)[
+Functions 1:
+
+```nix
+> f = x: x + 1
+> f 2
+3
+> g = g': x: g' x + 1
+> g f 2
+4
+```
+][
+Functions 2:
+
+```nix
+> h = { x ? 1 }: x + 1
+> h
+<function>
+> h { }
+2
+> h { x = 2; }
+3
+```
+]
+]
+
+#slide[
+  == Derivation
+
+  A _derivation_
+
+  // - is an instruction
+  - can depend on any number of other derivation
+  - can produce one or more outputs
+  // derivation outputs can be libraries, packages, mannual pages, etc.
+]
+
+#slide[
+  == Closure
+
+  A _closure_
+
+  - encapsulates all of the packages required to build or run it
+  - has two types, build-time closure and runtime closure// differenciated by phases, buildPhase, buildInputs, nativeBuildInputs v.s. installPhase, fixupPhase
 ]
 
 #slide[
@@ -139,12 +215,8 @@ Nix expressions $arrow.r.double$ derivation(s)
 
 #set text(14pt)
 
-
-#grid(
-  columns: 2,
-  gutter: 2cm,
-  [
-  ```nix
+#grid(columns: 2, gutter: 2cm, [
+```nix
   {
     inputs = { ... };
 
@@ -162,10 +234,9 @@ Nix expressions $arrow.r.double$ derivation(s)
       });
   }
   ```
-  ],
-  [
-  #v(4.5cm)
-  ```txt
+], [
+#v(4.5cm)
+```txt
    ________
   < cheese >
    --------
@@ -175,8 +246,7 @@ Nix expressions $arrow.r.double$ derivation(s)
                   ||----w |
                   ||     ||
   ```
-  ],
-)
+])
 ]
 
 #slide[
@@ -196,14 +266,14 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-  devShells.default = pkgs.mkShell {
-    packages = with pkgs; [
-      cargo
-      rustc
-      rustfmt
-    ];
-  };
-  ```
+    devShells.default = pkgs.mkShell {
+      packages = with pkgs; [
+        cargo
+        rustc
+        rustfmt
+      ];
+    };
+    ```
   ],
   [
   *Formatter*:
@@ -214,13 +284,13 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-  formatter = pkgs.writeShellScriptBin "formatter" ''
-    set -eoux pipefail
-    shopt -s globstar
-    ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-    ${pkgs.rustfmt}/bin/rustfmt **/*.rs
-  '';
-  ```
+    formatter = pkgs.writeShellScriptBin "formatter" ''
+      set -eoux pipefail
+      shopt -s globstar
+      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+      ${pkgs.rustfmt}/bin/rustfmt **/*.rs
+    '';
+    ```
   ],
 )
 ]
@@ -236,46 +306,46 @@ Nix expressions $arrow.r.double$ derivation(s)
   columns: 2,
   gutter: 2cm,
   [
-    w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
-    
-    ```shell
-    nix-repl> pkgs.coq_8_
-    pkgs.coq_8_10  pkgs.coq_8_12
-    pkgs.coq_8_14  pkgs.coq_8_16
-    pkgs.coq_8_18  pkgs.coq_8_5
-    pkgs.coq_8_7   pkgs.coq_8_9
-    ...
-    ```
-    
-    #v(2em)
-    
-    w/ `nix shell`:
-    
-    ```shell
-    nix shell nixpkgs/<hash>#{pkg1,...}
-    ```
-    
-    #v(2em)
-  
-    or DIY!
+  w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
+
+  ```shell
+      nix-repl> pkgs.coq_8_
+      pkgs.coq_8_10  pkgs.coq_8_12
+      pkgs.coq_8_14  pkgs.coq_8_16
+      pkgs.coq_8_18  pkgs.coq_8_5
+      pkgs.coq_8_7   pkgs.coq_8_9
+      ...
+      ```
+
+  #v(2em)
+
+  w/ `nix shell`:
+
+  ```shell
+      nix shell nixpkgs/<hash>#{pkg1,...}
+      ```
+
+  #v(2em)
+
+  or DIY!
   ],
   [
-    w/ flakes:
-    
-    ```nix
-    inputs = {
-      nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
-      nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
-      ...
-    };
+  w/ flakes:
 
-    outputs = { self, ... }: {
-      ...
-      pkgsA.<some pkg>;
-      pkgsB.<some pkg>;
-      ...
-    };
-    ```
+  ```nix
+      inputs = {
+        nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
+        nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
+        ...
+      };
+
+      outputs = { self, ... }: {
+        ...
+        pkgsA.<some pkg>;
+        pkgsB.<some pkg>;
+        ...
+      };
+      ```
   ],
 )
 ]
@@ -314,27 +384,25 @@ outputs = { self, nixpkgs, ... }: {
 };
 ```
 
-*System Closure*:
-```shell
+*System Closure*: ```shell
 nix build .#nixosConfigurations.example3.config.system.build.toplevel
 ```
 
-*Rebuild*:
-```shell
+*Rebuild*: ```shell
 nixos-rebuild <switch|boot|...> --flake .#example3
 ```
 ]
 #slide[
-== Resources
+  == Resources
 
-- https://github.com/determinatesystems/nix-installer
-- https://zero-to-nix.com
-- https://nixos.org/manual/nix/unstable/
-- https://discourse.nixos.org
-- https://mynixos.com
-- REPL
-- source code
-  - https://github.com/features/code-search
-  - https://sourcegraph.com
+  - https://github.com/determinatesystems/nix-installer
+  - https://zero-to-nix.com
+  - https://nixos.org/manual/nix/unstable/
+  - https://discourse.nixos.org
+  - https://mynixos.com
+  - REPL
+  - source code
+    - https://github.com/features/code-search
+    - https://sourcegraph.com
 ]
 

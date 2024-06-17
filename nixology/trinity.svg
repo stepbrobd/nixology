@@ -7,14 +7,14 @@
   <path fill="#848484" d="M570 106a64 64 0 0 0 13 0c4 0 1-1-6-1s-10 0-6 1m2846 0a64 64 0 0 0 13 0c4 0 1-1-6-1s-10 0-6 1"/>
   <path fill="#bcbcbc" d="M97 592c0 4 0 5 1 4s1-5 0-7-1 0-1 4"/>
   <path fill="#cfcfcf" d="m3083 247-8 10 10-8 10-10c0-1-2 0-10 8M1057 587c0 4 0 6 1 4s0-6 0-8-1 0-1 5m590 460-7 8 8-7c7-6 8-8 7-8a69 69 0 0 0-7 8m-1075 44h15c5 0 1-1-7-1s-12 0-7 1m2847 0h14c4 0 1-1-6-1s-10 0-7 1M1643 2670l-8 10 8-8c8-7 10-10 8-10a87 87 0 0 0-8 9"/>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1926.245" y="1461.991" transform="matrix(2.121602, 0, 0, 2.258065, -2233.781494, -1804.860596)">nix</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1848.869" y="407.24">IS NOT</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="317.647" y="610.859">nixpkgs</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1926.245" y="1461.991" transform="matrix(2.121602, 0, 0, 2.258065, -2233.781494, -1804.860596)">Nix</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1848.869" y="407.24">is not</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="317.647" y="610.859">Nixpkgs</text>
   <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="3294.57" y="619.004">NixOS</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1669.683" y="2944.344" transform="matrix(1, 0, 0, 1, -36.651585, 69.230774)">Nix<tspan x="1669.6829833984375" dy="1em">​</tspan>(the language)</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1128.054" y="969.231">IS</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="2610.407" y="1022.172">IS</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1934.39" y="2235.747">IS</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="838.914" y="1787.783">IS NOT</text>
-  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="2756.377" y="1871.267">IS NOT</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1669.683" y="2944.344" transform="matrix(1, 0, 0, 1, -36.651585, 69.230774)">Nix DSL</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1128.054" y="969.231">is</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="2610.407" y="1022.172">is</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="1934.39" y="2235.747">is</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="838.914" y="1787.783">is not</text>
+  <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 130px;" x="2756.377" y="1871.267">is not</text>
 </svg>
