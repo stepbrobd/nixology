@@ -321,14 +321,14 @@ The process of: Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-                      devShells.default = pkgs.mkShell {
-                        packages = with pkgs; [
-                          cargo
-                          rustc
-                          rustfmt
-                        ];
-                      };
-                      ```
+                            devShells.default = pkgs.mkShell {
+                              packages = with pkgs; [
+                                cargo
+                                rustc
+                                rustfmt
+                              ];
+                            };
+                            ```
   ], [
   *Formatter*:
 
@@ -338,13 +338,13 @@ The process of: Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-                      formatter = pkgs.writeShellScriptBin "formatter" ''
-                        set -eoux pipefail
-                        shopt -s globstar
-                        ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-                        ${pkgs.rustfmt}/bin/rustfmt **/*.rs
-                      '';
-                      ```
+                            formatter = pkgs.writeShellScriptBin "formatter" ''
+                              set -eoux pipefail
+                              shopt -s globstar
+                              ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+                              ${pkgs.rustfmt}/bin/rustfmt **/*.rs
+                            '';
+                            ```
   ],
 )
 ]
@@ -359,21 +359,21 @@ The process of: Nix expressions $arrow.r.double$ derivation(s)
   *w/ builtin versions*: // for most critical and popular packages: llvm, gcc, node, ...
 
   ```shell
-                        nix-repl> pkgs.coq_8_
-                        pkgs.coq_8_10  pkgs.coq_8_12
-                        pkgs.coq_8_14  pkgs.coq_8_16
-                        pkgs.coq_8_18  pkgs.coq_8_5
-                        pkgs.coq_8_7   pkgs.coq_8_9
-                        ...
-                        ```
+                              nix-repl> pkgs.coq_8_
+                              pkgs.coq_8_10  pkgs.coq_8_12
+                              pkgs.coq_8_14  pkgs.coq_8_16
+                              pkgs.coq_8_18  pkgs.coq_8_5
+                              pkgs.coq_8_7   pkgs.coq_8_9
+                              ...
+                              ```
 
   #v(2em)
 
   *w/ `nix shell`*:
 
   ```shell
-                        nix shell nixpkgs/<hash>#{pkg1,...}
-                        ```
+                              nix shell nixpkgs/<hash>#{pkg1,...}
+                              ```
 
   #v(2em)
 
@@ -382,19 +382,19 @@ The process of: Nix expressions $arrow.r.double$ derivation(s)
   *w/ flakes*:
 
   ```nix
-                        inputs = {
-                          nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
-                          nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
-                          ...
-                        };
+                              inputs = {
+                                nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
+                                nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
+                                ...
+                              };
 
-                        outputs = { self, ... }: {
-                          ...
-                          pkgsA.<some pkg>;
-                          pkgsB.<some pkg>;
-                          ...
-                        };
-                        ```
+                              outputs = { self, ... }: {
+                                ...
+                                pkgsA.<some pkg>;
+                                pkgsB.<some pkg>;
+                                ...
+                              };
+                              ```
   ],
 )
 ]

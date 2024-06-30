@@ -8,7 +8,7 @@
     utils.lib.eachDefaultSystem
       (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = nixpkgs.legacyPackages.${system};
         lib = nixpkgs.lib;
 
         examplesFor = attr: lib.mapAttrs
