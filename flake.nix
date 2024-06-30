@@ -2,10 +2,10 @@
   outputs =
     { self
     , nixpkgs
-    , flake-utils
+    , utils
     , ...
     } @ inputs:
-    flake-utils.lib.eachDefaultSystem
+    utils.lib.eachDefaultSystem
       (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -41,27 +41,22 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    utils.url = "github:numtide/flake-utils";
 
     example1 = {
       url = "github:stepbrobd/nixology?dir=example1";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.utils.follows = "utils";
     };
     example2 = {
       url = "github:stepbrobd/nixology?dir=example2";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.utils.follows = "utils";
     };
     example3 = {
       url = "github:stepbrobd/nixology?dir=example3";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    example4 = {
-      url = "github:stepbrobd/nixology?dir=example4";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.utils.follows = "utils";
     };
   };
 }
