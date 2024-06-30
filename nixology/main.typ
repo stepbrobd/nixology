@@ -3,7 +3,7 @@
 
 #let title = "Nixology"
 #let author = "Yifei Sun"
-#let date = datetime(year: 2024, month: 6, day: 28)
+#let date = datetime(year: 2024, month: 7, day: 1)
 
 #set document(title: title, author: author, date: date)
 #set page(paper: "presentation-16-9")
@@ -37,8 +37,7 @@
 Functions:
 
 #grid(
-  columns: 2,
-  gutter: 2.5cm,
+  columns: 2, gutter: 2.5cm,
 )[
 ```nix
 { inputs = { ... }; }
@@ -164,58 +163,116 @@ Functions 2:
 ]
 
 #slide[
-  == Derivation
+== Derivation
 
-  A _derivation_
+A _derivation_
 
-  // - is an instruction
-  - can depend on any number of other derivation
-  - can produce one or more outputs
-  // derivation outputs can be libraries, packages, mannual pages, etc.
+#grid(columns: 2, gutter: 3cm)[
+- is plan / blueprint
+- it's used for producing
+  - `lib`: library outputs
+  - `bin`: binary outputs
+  - `dev`: header files, etc.
+  - `man`: man page entries
+  - ...
+][
+```hs
+  derivation ::
+    { system    : String
+    , name      : String
+    , builder   : Path | Drv
+    , ? args    : [String]
+    , ? outputs : [String]
+    } -> Drv
+  ```
+]
 ]
 
 #slide[
-  == Closure
+== Derivation
 
-  A _closure_
+Example:
 
-  - encapsulates all of the packages required to build or run it
-  - has two types, build-time closure and runtime closure// differenciated by phases, buildPhase, buildInputs, nativeBuildInputs v.s. installPhase, fixupPhase
+#grid(columns: 2, gutter: 0.75cm)[
+```hs
+  derivation ::
+    { system    : String
+    , name      : String
+    , builder   : Path | Drv
+    , ? args    : [String]
+    , ? outputs : [String]
+    } -> Drv
+  ```
+][
+```nix
+  derivation {
+    system = "aarch64-darwin";
+    name = "hi";
+    builder = "/bin/sh";
+    args = ["-c" "echo hi >$out"];
+    outputs = ["out"];
+  }
+  ```
+]
 ]
 
 #slide[
-== Nix Store #footnote("https://zero-to-nix.com/concepts/nix-store")
+== Derivation
 
-```txt
-/nix/store/ffkg7rz4zxfsdix6xxmhk2v3nx76r141-nix-2.18.1
-|---------|--------------------------------|---------|
- store     hash                             name
- prefix
+Special variables:
+
+#grid(columns: 2, gutter: 0.75cm)[
+```nix
+  derivation {
+    system = "aarch64-darwin";
+    name = "hi";
+    builder = "/bin/sh";
+    args = ["-c" "echo hi >$out"];
+    outputs = ["out"];     ^^^^
+  }             ^^^
+  ```
+][
+- `$src`: build source
+- `$out`: build output (default)
+- custom outputs
+
+]
+
+]
+
+#slide[
+== Nix Store
+
+```nix
+/nix/store/l2h1lyz50rz6z2c8jbni9daxjs39wmn3-hi
+|---------|--------------------------------|-|
+store     hash                             name
+prefix
 ```
 
-- store prefix can be local or remote (binary cache)
-- hash either derived from input (default) or output (CA derivation)
-- `*.drv` for derivation files
+- Store prefix can be either local or remote (binary cache)
+- Hash either derived from input (default) or output (CA derivation)
+- The hash ensures two realised derivations with the same name have different
+  paths if the inputs differ at all
 ]
 
 #slide[
 == Packaging
 
-Nix expressions $arrow.r.double$ derivation(s)
+The process of: Nix expressions $arrow.r.double$ derivation(s)
 
 - `builtins.derivation`
 - `stdenv.mkDerivation` (from `nixpkgs`)
 - `pkgs.buildGoApplication` (from `nixpkgs`)
-- `crane.lib.x86_64-linux.buildPackage` (from `crane`)
 - ...
 ]
 
 #slide[
-== Packaging #footnote("https://nixolo.gy/example1")
+== Packaging #footnote("Example 1")
 
 #set text(14pt)
 
-#grid(columns: 2, gutter: 2cm, [
+#grid(columns: 2, gutter: 4cm, [
 ```nix
   {
     inputs = { ... };
@@ -223,13 +280,13 @@ Nix expressions $arrow.r.double$ derivation(s)
     outputs = { self, nixpkgs, flake-utils }:
       flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = nixpkgs.legacyPackages.${system};
       in
       {
         packages.default = pkgs.writeShellApplication {
-          name = "cheese";
+          name = "moo";
           runtimeInputs = [ pkgs.cowsay ];
-          text = "cowsay cheese";
+          text = "cowsay moo";
         };
       });
   }
@@ -237,27 +294,25 @@ Nix expressions $arrow.r.double$ derivation(s)
 ], [
 #v(4.5cm)
 ```txt
-   ________
-  < cheese >
-   --------
-          \   ^__^
-           \  (oo)\_______
-              (__)\       )\/\
-                  ||----w |
-                  ||     ||
+ _____
+< moo >
+ -----
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
   ```
 ])
 ]
 
 #slide[
-== Development #footnote("https://nixolo.gy/example2")
+== Development #footnote("Example 2")
 
 #set text(14pt)
 
 #grid(
-  columns: 2,
-  gutter: 2cm,
-  [
+  columns: 2, gutter: 2cm, [
   *Shell*:
 
   - `nix develop` // starts a bash, cleans everything
@@ -266,16 +321,15 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-    devShells.default = pkgs.mkShell {
-      packages = with pkgs; [
-        cargo
-        rustc
-        rustfmt
-      ];
-    };
-    ```
-  ],
-  [
+                      devShells.default = pkgs.mkShell {
+                        packages = with pkgs; [
+                          cargo
+                          rustc
+                          rustfmt
+                        ];
+                      };
+                      ```
+  ], [
   *Formatter*:
 
   - `nix fmt`
@@ -284,125 +338,111 @@ Nix expressions $arrow.r.double$ derivation(s)
   #v(2em)
 
   ```nix
-    formatter = pkgs.writeShellScriptBin "formatter" ''
-      set -eoux pipefail
-      shopt -s globstar
-      ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
-      ${pkgs.rustfmt}/bin/rustfmt **/*.rs
-    '';
-    ```
+                      formatter = pkgs.writeShellScriptBin "formatter" ''
+                        set -eoux pipefail
+                        shopt -s globstar
+                        ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt .
+                        ${pkgs.rustfmt}/bin/rustfmt **/*.rs
+                      '';
+                      ```
   ],
 )
 ]
 
 #slide[
-== Development
+== Pinning
 
 #set text(14pt)
 
-*Pinning*:
-
 #grid(
-  columns: 2,
-  gutter: 2cm,
-  [
-  w/ builtin versions: // for most critical and popular packages: llvm, gcc, node, ...
+  columns: 2, gutter: 2cm, [
+  *w/ builtin versions*: // for most critical and popular packages: llvm, gcc, node, ...
 
   ```shell
-      nix-repl> pkgs.coq_8_
-      pkgs.coq_8_10  pkgs.coq_8_12
-      pkgs.coq_8_14  pkgs.coq_8_16
-      pkgs.coq_8_18  pkgs.coq_8_5
-      pkgs.coq_8_7   pkgs.coq_8_9
-      ...
-      ```
+                        nix-repl> pkgs.coq_8_
+                        pkgs.coq_8_10  pkgs.coq_8_12
+                        pkgs.coq_8_14  pkgs.coq_8_16
+                        pkgs.coq_8_18  pkgs.coq_8_5
+                        pkgs.coq_8_7   pkgs.coq_8_9
+                        ...
+                        ```
 
   #v(2em)
 
-  w/ `nix shell`:
+  *w/ `nix shell`*:
 
   ```shell
-      nix shell nixpkgs/<hash>#{pkg1,...}
-      ```
+                        nix shell nixpkgs/<hash>#{pkg1,...}
+                        ```
 
   #v(2em)
 
-  or DIY!
-  ],
-  [
-  w/ flakes:
+  *or DIY!*
+  ], [
+  *w/ flakes*:
 
   ```nix
-      inputs = {
-        nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
-        nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
-        ...
-      };
+                        inputs = {
+                          nixpkgsForA.url = "github:nixos/nixpkgs/<branch or hash>";
+                          nixpkgsForB.url = "github:nixos/nixpkgs/<branch or hash>";
+                          ...
+                        };
 
-      outputs = { self, ... }: {
-        ...
-        pkgsA.<some pkg>;
-        pkgsB.<some pkg>;
-        ...
-      };
-      ```
+                        outputs = { self, ... }: {
+                          ...
+                          pkgsA.<some pkg>;
+                          pkgsB.<some pkg>;
+                          ...
+                        };
+                        ```
   ],
 )
 ]
 
 #slide[
-== System Configurations
+== Build System #footnote("Example 3")
 
-#set text(18pt)
+Example: `eJS`
 
-*Modules* #footnote("https://mynixos.com/nixpkgs/options/services.caddy"):
-
-```nix
-{ ... }:
-{
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-  services.caddy = {
-    virtualHosts."nixolo.gy" = {
-      extraConfig = "redir https://github.com/stepbrobd/nixology/tree/master{uri}";
-      serverAliases = [ "*.nixolo.gy" ];
-    };
-  };
-}
-```
+- Combine multiple build tools (`ant`, `make`, ...)
+- Build multiple targets (binary target, jar, ...)
+- Wrap programs
+- ...
 ]
 
 #slide[
-== System Configurations #footnote("https://nixolo.gy/example3")
+== System Configuration #footnote("Ugawa lab infra")
 
 #set text(18pt)
 
+i.e. NixOS
+
 ```nix
-outputs = { self, nixpkgs, ... }: {
-  nixosConfigurations.example3 = nixpkgs.lib.nixosSystem {
-    modules = [ ./hardware.nix ./service.nix ];
-  };
-};
+outputs = { nixpkgs, ... }: {
+  nixosConfigurations.test = nixpkgs.lib.nixosSystem {
+    modules = [ /* a list of modules goes here */ ];
+};};
 ```
 
 *System Closure*: ```shell
-nix build .#nixosConfigurations.example3.config.system.build.toplevel
+nix build .#nixosConfigurations.test.config.system.build.toplevel
 ```
 
 *Rebuild*: ```shell
-nixos-rebuild <switch|boot|...> --flake .#example3
+nixos-rebuild <switch|boot|...> --flake .#test
 ```
 ]
+
 #slide[
-  == Resources
+== Resources
 
-  - https://github.com/determinatesystems/nix-installer
-  - https://zero-to-nix.com
-  - https://nixos.org/manual/nix/unstable/
-  - https://discourse.nixos.org
-  - https://mynixos.com
-  - REPL
-  - source code
-    - https://github.com/features/code-search
-    - https://sourcegraph.com
+- Installer: https://github.com/determinatesystems/nix-installer
+- REPL is your friend: `nix repl`
+- Intro: https://zero-to-nix.com
+- Mannual: https://nixos.org/manual/nix/unstable/
+- Forum: https://discourse.nixos.org
+- Options: https://mynixos.com
+- Source code search:
+  - https://github.com/features/code-search
+  - https://sourcegraph.com
 ]
-
