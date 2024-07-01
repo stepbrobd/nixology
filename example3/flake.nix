@@ -10,7 +10,6 @@
     utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        deps = with pkgs; [ ant gcc jdk makeWrapper python3 ];
       in
       {
         packages.default = pkgs.stdenv.mkDerivation {
@@ -20,27 +19,34 @@
 
           dontConfigure = true;
 
+          patchPhase = ''
+            runHook prePatch
+
+            # Change hardcoded gcc to CC
+            substituteInPlace ejsi/Makefile \
+              --replace 'gcc -O2 -o ejsi ejsi.c' 'CC -O2 -o ejsi ejsi.c'
+
+            runHook postPatch
+          '';
+
           enableParallelBuilding = true;
-          nativeBuildInputs = deps;
+          buildInputs = with pkgs; [ jdk ];
+          nativeBuildInputs = with pkgs; [ ant makeWrapper python3 ];
           buildPhase = ''
             runHook preBuild
 
             # Build VMGen
-            pushd vmgen
-            ant
-            popd
+            pushd vmgen && ant && popd
 
             # Build eJSC
-            pushd ejsc
-            ant
-            popd
+            pushd ejsc && ant && popd
 
             # Build eJSVM
             mkdir -p build && pushd build
             cp ../ejsvm/Makefile.template Makefile
-            make -j $NIX_BUILD_CORES
-
+            make CC=$CC CXX=$CXX -j $NIX_BUILD_CORES
             popd
+
             runHook postBuild
           '';
 
@@ -61,7 +67,7 @@
         };
 
         devShells.default = pkgs.mkShell {
-          packages = deps;
+          packages = with pkgs; [ ant jdk python3 ];
         };
 
         formatter = pkgs.nixpkgs-fmt;
