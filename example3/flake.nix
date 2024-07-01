@@ -22,9 +22,9 @@
           patchPhase = ''
             runHook prePatch
 
-            # Change hardcoded gcc to CC
+            # Change hardcoded gcc to $CC
             substituteInPlace ejsi/Makefile \
-              --replace 'gcc -O2 -o ejsi ejsi.c' 'CC -O2 -o ejsi ejsi.c'
+              --replace 'gcc -O2 -o ejsi ejsi.c' "$CC -O2 -o ejsi ejsi.c"
 
             runHook postPatch
           '';
