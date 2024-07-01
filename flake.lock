@@ -27,11 +27,11 @@
       },
       "locked": {
         "dir": "example1",
-        "lastModified": 1719753834,
-        "narHash": "sha256-m+Daue2Uoa2SwLBGRVZL+aZk2yHfm96Tm1Ex9l/Gcsk=",
+        "lastModified": 1719806410,
+        "narHash": "sha256-/8VwvJNcbsCRKIZOnbrJXOV1qGJ5LFnmXM4MPG1O2I0=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "387000d6f83c820ec52dae0b474fa210cc7fbe47",
+        "rev": "d2da968b0fb44eb524181a1cc8a0d823b0b384fc",
         "type": "github"
       },
       "original": {
@@ -52,11 +52,11 @@
       },
       "locked": {
         "dir": "example2",
-        "lastModified": 1719753834,
-        "narHash": "sha256-m+Daue2Uoa2SwLBGRVZL+aZk2yHfm96Tm1Ex9l/Gcsk=",
+        "lastModified": 1719806410,
+        "narHash": "sha256-/8VwvJNcbsCRKIZOnbrJXOV1qGJ5LFnmXM4MPG1O2I0=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "387000d6f83c820ec52dae0b474fa210cc7fbe47",
+        "rev": "d2da968b0fb44eb524181a1cc8a0d823b0b384fc",
         "type": "github"
       },
       "original": {
@@ -78,11 +78,11 @@
       },
       "locked": {
         "dir": "example3",
-        "lastModified": 1719753834,
-        "narHash": "sha256-m+Daue2Uoa2SwLBGRVZL+aZk2yHfm96Tm1Ex9l/Gcsk=",
+        "lastModified": 1719806410,
+        "narHash": "sha256-/8VwvJNcbsCRKIZOnbrJXOV1qGJ5LFnmXM4MPG1O2I0=",
         "owner": "stepbrobd",
         "repo": "nixology",
-        "rev": "387000d6f83c820ec52dae0b474fa210cc7fbe47",
+        "rev": "d2da968b0fb44eb524181a1cc8a0d823b0b384fc",
         "type": "github"
       },
       "original": {
